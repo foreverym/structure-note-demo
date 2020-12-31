@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="club.banyaun.jwtsec.dao.UserMapper">
+    
+    <sql id="Base_Column_List">
+        name,password,email,birth,phone,role,activated
+    </sql>
+
+    <insert id="insertUser" parameterType="club.banyaun.jwtsec.entity.User" useGeneratedKeys="true" keyColumn="id" keyProperty="user.id">
+        INSERT INTO user
+        (name,password,email,birth,phone,role,activated)
+        VALUES
+        (#{user.name},#{user.password},#{user.email},#{user.birth},#{user.phone},#{user.role},#{user.activated})
+    </insert>
+
+    <update id="updateToActive" parameterType="java.lang.Integer">
+        UPDATE user
+        SET activated = 1
+        WHERE id = #{id}
+    </update>
+
+    <select id="queryLoginDetail" parameterType="java.lang.String" resultType="club.banyaun.jwtsec.entity.LoginDetail">
+        SELECT
+        name,password,activated
+        FROM user WHERE name=#{name}
+    </select>
+
+    <select id="getAuthUser" parameterType="java.lang.String" resultType="club.banyaun.jwtsec.entity.ExtAuthUser">
+        SELECT u.name, u.password, r.auth
+        FROM
+        user u JOIN role r ON u.role = r.role_id
+        WHERE u.name=#{name}
+    </select>
+
+</mapper>
